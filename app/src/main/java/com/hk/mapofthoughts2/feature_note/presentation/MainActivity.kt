@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hk.mapofthoughts2.R
+import com.hk.mapofthoughts2.feature_note.presentation.MapPage.MapScreen
 import com.hk.mapofthoughts2.feature_note.presentation.components.AddNoteScreen
 import com.hk.mapofthoughts2.feature_note.presentation.components.NotesScreen
 import com.hk.mapofthoughts2.theme.MapOfThoughtsAppTheme
@@ -33,6 +34,9 @@ class MainActivity : AppCompatActivity() {
 
                     composable(route = Screen.AddNoteScreen.route){
                         AddNoteScreen(navController = navController)
+                    }
+                    composable(route = Screen.MapScreen.route){
+                        MapScreen(navController = navController)
                     }
                 }
                 }

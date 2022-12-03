@@ -73,6 +73,18 @@ fun NotesScreen(
                 }) {
                 Text(text = "Write note now")
             }
+
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp),
+                onClick = {
+                    scope.launch{
+                        navController.navigate(Screen.MapScreen.route)
+                    }
+                }) {
+                Text(text = "Jump to Map Page")
+            }
         }
     }
 
