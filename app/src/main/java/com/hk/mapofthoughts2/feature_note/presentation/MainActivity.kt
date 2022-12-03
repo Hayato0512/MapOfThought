@@ -4,14 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.material.Surface
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hk.mapofthoughts2.R
+import com.hk.mapofthoughts2.feature_note.presentation.components.AddNoteScreen
 import com.hk.mapofthoughts2.feature_note.presentation.components.NotesScreen
 import com.hk.mapofthoughts2.theme.MapOfThoughtsAppTheme
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,9 +29,12 @@ class MainActivity : AppCompatActivity() {
 
                     composable(route = Screen.NotesScreen.route){
                         NotesScreen(navController = navController)
-                        
                     }
-                }   
+
+                    composable(route = Screen.AddNoteScreen.route){
+                        AddNoteScreen(navController = navController)
+                    }
+                }
                 }
                 
             }

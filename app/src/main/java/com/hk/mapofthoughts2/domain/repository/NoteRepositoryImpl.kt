@@ -25,4 +25,8 @@ class NoteRepositoryImpl(
     override suspend fun deleteNode(note: Note){
     return dao.deleteNote(note)
     }
+    override suspend fun deleteFirstElement(id:Int){
+        println("debug: hey this is NoteRepoImpl. is it working?" )
+        return dao.deleteFirstElement()
+    }
 }

@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.hk.mapofthoughts2.domain.model.Note
-import com.hk.mapofthoughts2.feature_note.presentation.NoteViewModel
-import com.hk.mapofthoughts2.feature_note.presentation.NotesEvent
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.hk.mapofthoughts2.feature_note.presentation.NotesPage.NoteViewModel
+import com.hk.mapofthoughts2.feature_note.presentation.NotesPage.NotesEvent
+import com.hk.mapofthoughts2.feature_note.presentation.Screen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,21 +48,35 @@ fun NotesScreen(
                }
            }
 
-            //why is this button not showing up?
-            //So it was there. But was out of screen?? what is weird
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp),
-                    onClick = {
-                        println("debug: button Clicked")
-                    }) {
-                    Text(text = "buttonUnkoUnko")
-                }
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp),
+                onClick = {
+                    scope.launch{
+                        println("debug: hey its in NoteScreen. Is it working? ")
+                        viewModel.onEvent(NotesEvent.deleteNoteAt, Note("Title${count.value}", "Content is like this for now. ", "Library", "12", "12"))
+                    }
+                }) {
+                Text(text = "Delete")
+            }
+
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp),
+                onClick = {
+                    scope.launch{
+                        navController.navigate(Screen.AddNoteScreen.route)
+                        println("debug: ? ")
+                    }
+                }) {
+                Text(text = "Write note now")
             }
         }
+    }
 
-        Row{
+    Row{
 
             Button(onClick = {
 scope.launch {

@@ -1,4 +1,4 @@
-package com.hk.mapofthoughts2.feature_note.presentation
+package com.hk.mapofthoughts2.feature_note.presentation.NotesPage
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -9,11 +9,9 @@ import com.hk.mapofthoughts2.domain.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
@@ -37,8 +35,8 @@ class NoteViewModel @Inject constructor(
         println("debug:::HEUYNEYELJS:LFJKLESJS:LKFEJFK")
     }
 
-    suspend fun onEvent(event:NotesEvent, note: Note){
-        if (event ==NotesEvent.addNote){
+    suspend fun onEvent(event: NotesEvent, note: Note){
+        if (event == NotesEvent.addNote){
             coroutineScope {
                 println("debug: hey in viewModel, now we send it to repository")
                 noteRepository.insertNote(note)
@@ -46,13 +44,20 @@ class NoteViewModel @Inject constructor(
             getNotes()
             return
         }
-        else if (event==NotesEvent.deleteNote){
+        else if (event== NotesEvent.deleteNote){
            coroutineScope {
               noteRepository.deleteNode(note)
            }
             return
         }
-        else if (event==NotesEvent.getAllNotes){
+        else if (event== NotesEvent.deleteNoteAt){
+            coroutineScope {1
+                println("debug: hey, viewModel. Is it working? ")
+                 noteRepository.deleteFirstElement(1)
+            }
+            return
+        }
+        else if (event== NotesEvent.getAllNotes){
            coroutineScope{
 //               notes = noteRepository.getNotes().asLiveData();
            }

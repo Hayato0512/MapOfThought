@@ -14,6 +14,9 @@ interface NoteDao {
    @Query("SELECT * FROM  note WHERE id=:id")
     fun getNoteById (id:Int):Note
 
+    @Query("DELETE FROM note  WHERE id IN (SELECT id FROM note LIMIT 1)")
+    fun deleteFirstElement()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNote(note:Note)
 

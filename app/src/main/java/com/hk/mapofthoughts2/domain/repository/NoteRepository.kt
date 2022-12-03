@@ -14,4 +14,6 @@ interface NoteRepository {
     suspend fun insertNote(note:Note)
 
     suspend fun deleteNode(note:Note)
+
+    suspend fun deleteFirstElement(id:Int)
 }
