@@ -1,5 +1,7 @@
 package com.hk.mapofthoughts2.feature_note.presentation.components
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -41,15 +44,21 @@ fun NotesScreen(
                    modifier = Modifier.fillMaxWidth().weight(1f).height(300.dp)
                ){
                    items(state.notes){note->
+                       Surface(color=Color.Green, modifier = Modifier.padding(4.dp).border(
+                           BorderStroke(2.dp, SolidColor(Color.Red)) ) ){
+
+                       }
                        Text(
                            text = note.title
                        )
-                       Text(
-                           text = note.latitude
-                       )
-                       Text(
-                           text = note.longitude
-                       )
+                       Row{
+                           Text(
+                               text = note.latitude
+                           )
+                           Text(
+                               text = note.longitude
+                           )
+                       }
                    }
                }
            }
@@ -94,36 +103,4 @@ fun NotesScreen(
         }
     }
 
-    Row{
-
-            Button(onClick = {
-scope.launch {
-    viewModel.onEvent(NotesEvent.addNote, Note("Title${count.value}", "Content is like this for now. ", "Library", "12", "12"))
-    println("debug: hey in NotesScreen, we jsut called viewModel to addNote")
-}
-            }, modifier = Modifier.padding(16.dp)) {
-
-                Text(
-                    text = "Write the button text here"
-                )
-            }
-
-            Button(onClick={
-                count.value ++;
-            }){
-
-Text(
-    text = "hey you touched me ${count.value} times"
-)
-            }
-        }
     }
-
-@Composable
-fun ButtonExample() {
-    Button(onClick = { /* Do something! */ }, colors = ButtonDefaults.textButtonColors(
-        backgroundColor = Color.Red
-    )) {
-        Text("ButtonExample")
-    }
-}
