@@ -2,6 +2,7 @@ package com.hk.mapofthoughts2.feature_note.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -44,20 +45,30 @@ fun NotesScreen(
                    modifier = Modifier.fillMaxWidth().weight(1f).height(300.dp)
                ){
                    items(state.notes){note->
-                       Surface(color=Color.Green, modifier = Modifier.padding(4.dp).border(
-                           BorderStroke(2.dp, SolidColor(Color.Red)) ) ){
+                       Surface(
+                           color=Color.Green,
+                          modifier = Modifier
+                              .padding(4.dp)
+                              .fillMaxWidth()
+                              .border(BorderStroke(2.dp, SolidColor(Color.Red)) )
+                              .clickable {
+                                  println("debug: you just touched a note: id ${note.id}")
+                              }
 
-                       }
-                       Text(
-                           text = note.title
-                       )
-                       Row{
-                           Text(
-                               text = note.latitude
-                           )
-                           Text(
-                               text = note.longitude
-                           )
+                       ){
+                           Column{
+                               Text(
+                                   text = note.title
+                               )
+                               Row{
+                                   Text(
+                                       text = note.latitude
+                                   )
+                                   Text(
+                                       text = note.longitude
+                                   )
+                               }
+                           }
                        }
                    }
                }
