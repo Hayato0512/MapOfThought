@@ -44,6 +44,12 @@ fun NotesScreen(
                        Text(
                            text = note.title
                        )
+                       Text(
+                           text = note.latitude
+                       )
+                       Text(
+                           text = note.longitude
+                       )
                    }
                }
            }
