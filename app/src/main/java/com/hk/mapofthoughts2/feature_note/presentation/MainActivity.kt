@@ -24,6 +24,7 @@ import com.hk.mapofthoughts2.R
 import com.hk.mapofthoughts2.domain.model.Location2
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.MapPage.MapScreen
+import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoScreen
 import com.hk.mapofthoughts2.feature_note.presentation.components.AddNoteScreen
 import com.hk.mapofthoughts2.feature_note.presentation.components.NotesScreen
 import com.hk.mapofthoughts2.theme.MapOfThoughtsAppTheme
@@ -41,7 +42,6 @@ class MainActivity(
          fusedLocationProviderClient =  LocationServices.getFusedLocationProviderClient(this)
         var locationToPass = Location2(-1,-1)
 
-//        fetchLocation()
         setContent {
         
             MapOfThoughtsAppTheme {
@@ -61,6 +61,9 @@ class MainActivity(
                     }
                     composable(route = Screen.MapScreen.route){
                         MapScreen(navController = navController )
+                    }
+                    composable(route = Screen.MoreInfoScreen.route){
+                        MoreInfoScreen(navController = navController )
                     }
                 }
                 }

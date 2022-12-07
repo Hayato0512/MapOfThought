@@ -53,6 +53,8 @@ fun NotesScreen(
                               .border(BorderStroke(2.dp, SolidColor(Color.Red)) )
                               .clickable {
                                   println("debug: you just touched a note: id ${note.id}")
+                                  navController.navigate(Screen.MoreInfoScreen.route)
+
                               }
 
                        ){
@@ -80,7 +82,6 @@ fun NotesScreen(
                     .height(40.dp),
                 onClick = {
                     scope.launch{
-                        println("debug: hey its in NoteScreen. Is it working? ")
                         viewModel.onEvent(NotesEvent.deleteNoteAt, Note("Title${count.value}", "Content is like this for now. ", "Library", "12", "12"))
                     }
                 }) {
