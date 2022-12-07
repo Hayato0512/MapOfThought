@@ -12,9 +12,11 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationToken
@@ -62,7 +64,19 @@ class MainActivity(
                     composable(route = Screen.MapScreen.route){
                         MapScreen(navController = navController )
                     }
-                    composable(route = Screen.MoreInfoScreen.route){
+                    composable(
+                        route = Screen.MoreInfoScreen.route +
+                                "?noteId={noteId}",
+                        arguments = listOf(
+                            navArgument(
+                                name = "noteId"
+                            ){
+                                type = NavType.IntType
+                                defaultValue= -1
+                            },
+                        )
+
+                    ){
                         MoreInfoScreen(navController = navController )
                     }
                 }

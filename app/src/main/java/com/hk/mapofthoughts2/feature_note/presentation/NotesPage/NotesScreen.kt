@@ -53,7 +53,10 @@ fun NotesScreen(
                               .border(BorderStroke(2.dp, SolidColor(Color.Red)) )
                               .clickable {
                                   println("debug: you just touched a note: id ${note.id}")
-                                  navController.navigate(Screen.MoreInfoScreen.route)
+                                  navController.navigate(
+                                      Screen.MoreInfoScreen.route +
+                                  "?noteId=${note.id}"
+                                  )
 
                               }
 
