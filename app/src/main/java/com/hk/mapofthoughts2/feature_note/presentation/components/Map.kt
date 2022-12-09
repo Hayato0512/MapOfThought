@@ -40,19 +40,17 @@ fun MapComponent(
             cameraPositionState = cameraPositionState
         ) {
             state.notes.forEach{
+
             Marker(
                 state = MarkerState(position = LatLng(it.latitude.toDouble(),it.longitude.toDouble())),
                 title = it.title,
                 snippet = it.content
             )
+
             }
 
-//            Marker(
-//                state = MarkerState(position = singapore),
-//                title = "Singapore",
-//                snippet = "Marker in Singapore"
-//            )
         }
+
     }
 
 }

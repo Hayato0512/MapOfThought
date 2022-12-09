@@ -7,8 +7,10 @@ import android.content.Context.LOCATION_SERVICE
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,10 +30,17 @@ import com.google.android.gms.location.LocationServices
 import com.hk.mapofthoughts2.domain.model.Location2
 import com.hk.mapofthoughts2.domain.model.Note
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
+import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.ApiInterface
+import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.WeatherData
 import com.hk.mapofthoughts2.feature_note.presentation.MainActivity
 import com.hk.mapofthoughts2.feature_note.presentation.NotesPage.NoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.Screen
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -43,21 +53,19 @@ fun AddNoteScreen(
     val titleState = viewModel.titleState.value
     val contentState = viewModel.contentState.value
     val scope = rememberCoroutineScope()
+//        getWeatherData();
 
     Box{
         Column{
 
-            Text(
-            text = "Add Note Screen",
-            modifier = Modifier.fillMaxWidth()
-            )
+
             TextTitleField(
                 navController = navController,
                 currentText = titleState,
                 onValueChange = {newText->
                    viewModel.titleState.value = newText
                 },
-                modifier = Modifier
+                modifier = Modifier.padding(16.dp).fillMaxWidth().background(Color.DarkGray)
             )
             TextTitleField(
                 navController = navController,
@@ -66,7 +74,7 @@ fun AddNoteScreen(
                     viewModel.contentState.value = newText
 
                 },
-                modifier = Modifier
+                modifier = Modifier.padding(10.dp).background(Color.LightGray)
             )
             Button(
                 onClick = {
@@ -103,5 +111,35 @@ fun AddNoteScreen(
             }
         }
     }
+
+}
+
+fun getWeatherData() {
+    val BASE_URL = "https://open-weather13.p.rapidapi.com/city/"
+    val retrofitBuilder = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(BASE_URL)
+        .build()
+        .create(ApiInterface::class.java)
+
+    val retrofitData = retrofitBuilder.getData()
+
+    retrofitData.enqueue(object : Callback<List<WeatherData>?> {
+        override fun onResponse(
+            call: Call<List<WeatherData>?>,
+            response: Response<List<WeatherData>?>
+        ) {
+            val responseBody = response.body()!!
+
+            for(myData in responseBody){
+                println("debug: hello, myData.id is here .${myData.id}")
+            }
+        }
+
+        override fun onFailure(call: Call<List<WeatherData>?>, t: Throwable) {
+            println("debug: onFailure22 ${t.message}")
+        }
+    })
+
 
 }
