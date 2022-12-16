@@ -1,22 +1,27 @@
 package com.hk.mapofthoughts2.feature_note.presentation
 
+import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationRequest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationToken
@@ -25,21 +30,36 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.hk.mapofthoughts2.R
 import com.hk.mapofthoughts2.domain.model.Location2
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
+import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.CameraScreen
+import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.PreviewScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MapPage.MapScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoScreen
 import com.hk.mapofthoughts2.feature_note.presentation.components.AddNoteScreen
 import com.hk.mapofthoughts2.feature_note.presentation.components.NotesScreen
 import com.hk.mapofthoughts2.theme.MapOfThoughtsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 class MainActivity(
 ) : AppCompatActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ){ isGranted ->
+        if (isGranted){
+            Log.i("kilo", "Permission Granted")
+        }else{
+            Log.i("kilo", "Permission Denied")
+        }
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        requestCameraPermission()
         var locationState  = mutableStateOf(Location2(-1, -1))
          fusedLocationProviderClient =  LocationServices.getFusedLocationProviderClient(this)
         var locationToPass = Location2(-1,-1)
@@ -59,10 +79,13 @@ class MainActivity(
 
                     composable(route = Screen.AddNoteScreen.route){
                         fetchLocation()
-                        AddNoteScreen(navController = navController, {fetchLocation()},fetchLocation())
+                        AddNoteScreen(navController = navController, {fetchLocation()},{callRequestPermission()},fetchLocation())
                     }
                     composable(route = Screen.MapScreen.route){
                         MapScreen(navController = navController )
+                    }
+                    composable(route = Screen.CameraScreen.route){
+                        CameraScreen(navController = navController, getDirectory())
                     }
                     composable(
                         route = Screen.MoreInfoScreen.route +
@@ -79,6 +102,21 @@ class MainActivity(
                     ){
                         MoreInfoScreen(navController = navController )
                     }
+                    composable(
+                        route = Screen.PreviewScreen.route +
+                                "?path={path}",
+                        arguments = listOf(
+                            navArgument(
+                                name = "path"
+                            ){
+                                type = NavType.StringType
+                                defaultValue=""
+                            },
+                        )
+
+                    ){
+                        PreviewScreen()
+                    }
                 }
                 }
                 
@@ -87,6 +125,15 @@ class MainActivity(
 
     //or maybe just make an json object and then return it
 }
+
+    private fun getDirectory(): File {
+        val mediaDir = externalMediaDirs.firstOrNull()?.let {
+            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+        }
+        return if (mediaDir != null && mediaDir.exists())
+            mediaDir else filesDir
+    }
+
 private fun fetchLocation(): Location2 {
     val task = fusedLocationProviderClient.getCurrentLocation(LocationRequest.QUALITY_HIGH_ACCURACY,object : CancellationToken() {
         override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
@@ -117,4 +164,27 @@ private fun fetchLocation(): Location2 {
     }
     return returnLocation
 }
+
+
 }
+
+fun callRequestPermission(){
+
+    }
+
+
+//    private fun requestCameraPermission(){
+//        when{
+//            ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.CAMERA
+//            )==PackageManager.PERMISSION_GRANTED->{
+//                Log.i("kilo", "Permission previously granted")
+//            }
+//            ActivityCompat.shouldShowRequestPermissionRationale(
+//                this,
+//                Manifest.permission.CAMERA
+//            )-> Log.i("kilo", "Show camera  permissions dialog")
+//            else -> requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+//        }
+//    }
