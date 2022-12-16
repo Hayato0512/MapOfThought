@@ -18,8 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.hk.mapofthoughts2.R
-
 //import coil.compose.rememberImagePainter
 @Composable
 fun PreviewScreen(
@@ -28,6 +28,7 @@ fun PreviewScreen(
     val pathState :String= viewModel.pathState.value
     val savedStateHandle: SavedStateHandle = SavedStateHandle()
     val path : String? = savedStateHandle.get<String>("path")
+    val fakePath: String? = "/storage/emulated/0/Android/media/com.hk.mapofthoughts2/MapOfThoughts2/202212350-124625.jpg"
     if(path !=null){
        println("debug: hey the path is there ${path}")
     }else{
@@ -36,29 +37,33 @@ fun PreviewScreen(
 //    savedStateHandle.get<String>("path")?.let {
 //        Log.d("PreviewScreen.kt", "hey, just got the path. that is ${it}")
 //    }
-    val imgFile = File(pathState)
+    val imgFile = File(fakePath)
+//    val imgFile = File(pathState)
     var imgBitmap: Bitmap? = null
     if (imgFile.exists()) {
         // on below line we are creating an image bitmap variable
         // and adding a bitmap to it from image file.
         imgBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+    }else{
+       println("debug: imgFile does not exist in the specified directory. meaning, saving the image has not been done.")
     }
-//    Image(
-//        // on the below line we are specifying the drawable image for our image.
-//        // painter = painterResource(id = courseList[it].languageImg),
-////        painter = rembember(id = R.drawable.ic_launcher_background),
-////        data = imgBitmap
-//        // on the below line we are specifying
-//        // content description for our image
-//        contentDescription = "Image",
-//
-//        // on the below line we are setting the height
-//        // and width for our image.
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(200.dp)
-//            .padding(10.dp)
-//    )
+//    val painter = rememberImagePainter
+    Image(
+        // on the below line we are specifying the drawable image for our image.
+//  image       painter = rememberImage(),
+        painter = rememberImagePainter(data = imgBitmap),
+//        data = imgBitmap
+        // on the below line we are specifying
+        // content description for our image
+        contentDescription = "Image",
+
+        // on the below line we are setting the height
+        // and width for our image.
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(10.dp)
+    )
     Text(
         text="what up??"
     )
