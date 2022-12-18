@@ -131,7 +131,15 @@ fun AddNoteScreen(
                },
 //            modifier = Modifier.height(30.dp).width(40.dp)
             ){
-               Text(text="Permission")
+               Text(text="Camera")
+            }
+            Button(
+                onClick={
+                    navController.navigate("audio_screen")
+                },
+//            modifier = Modifier.height(30.dp).width(40.dp)
+            ){
+                Text(text="Audio")
             }
             Button(
                 onClick = {

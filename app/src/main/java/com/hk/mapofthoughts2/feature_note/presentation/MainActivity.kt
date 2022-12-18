@@ -30,6 +30,8 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.hk.mapofthoughts2.R
 import com.hk.mapofthoughts2.domain.model.Location2
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
+import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.AudioScreen
+import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.AudioViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.CameraScreen
 import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.PreviewScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MapPage.MapScreen
@@ -44,7 +46,19 @@ import java.io.File
 class MainActivity(
 ) : AppCompatActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
+    private val audioViewModel = AudioViewModel()
+    val activity = this
+    private val requestPermissionLauncherAudio = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted){
+            startRecording()
+            println("debug: access Granted!! so startRecording() in MAinActivity")
+        }
+        else{
+            Log.d("MainActivity", "permission DINIED")
+        }
+    }
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ){ isGranted ->
@@ -59,6 +73,8 @@ class MainActivity(
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        audioViewModel.folderPath = externalCacheDir?.absolutePath
+            ?: throw IllegalStateException("debug: externalCacheDir is null! LILLOOO!")
 //        requestCameraPermission()
         var locationState  = mutableStateOf(Location2(-1, -1))
          fusedLocationProviderClient =  LocationServices.getFusedLocationProviderClient(this)
@@ -83,6 +99,9 @@ class MainActivity(
                     }
                     composable(route = Screen.MapScreen.route){
                         MapScreen(navController = navController )
+                    }
+                    composable(route = Screen.AudioScreen.route){
+                        AudioScreen(navController = navController ,activity)
                     }
                     composable(route = Screen.CameraScreen.route){
                         CameraScreen(navController = navController, getDirectory())
@@ -165,6 +184,20 @@ private fun fetchLocation(): Location2 {
     return returnLocation
 }
 
+    fun requestAudioRecording(){
+        //request, if Granted, call startRecording
+        requestPermissionLauncherAudio.launch(Manifest.permission.RECORD_AUDIO)
+    }
+    fun requestStopRecording(){
+        stopRecording()
+    }
+    private fun startRecording(){
+       println("debug: in startRecording in mainActivity. viewModel.startRecording")
+       audioViewModel.startRecording()
+    }
+    private fun stopRecording(){
+        audioViewModel.stopRecording()
+    }
 
 }
 

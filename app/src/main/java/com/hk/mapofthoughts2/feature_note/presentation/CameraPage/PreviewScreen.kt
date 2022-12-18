@@ -34,9 +34,6 @@ fun PreviewScreen(
     }else{
         println("debug: the path does not exist. Please check again. ")
     }
-//    savedStateHandle.get<String>("path")?.let {
-//        Log.d("PreviewScreen.kt", "hey, just got the path. that is ${it}")
-//    }
     val imgFile = File(fakePath)
 //    val imgFile = File(pathState)
     var imgBitmap: Bitmap? = null
@@ -47,12 +44,9 @@ fun PreviewScreen(
     }else{
        println("debug: imgFile does not exist in the specified directory. meaning, saving the image has not been done.")
     }
-//    val painter = rememberImagePainter
     Image(
         // on the below line we are specifying the drawable image for our image.
-//  image       painter = rememberImage(),
         painter = rememberImagePainter(data = imgBitmap),
-//        data = imgBitmap
         // on the below line we are specifying
         // content description for our image
         contentDescription = "Image",
