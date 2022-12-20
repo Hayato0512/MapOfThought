@@ -26,8 +26,10 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.hk.mapofthoughts2.R
+import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +43,8 @@ import java.util.concurrent.Executors
 fun Camera(
     navController: NavController,
     outputDirectory : File,
-    onMediaCaptured: (Uri?) -> Unit
+    onMediaCaptured: (Uri?) -> Unit,
+    addNoteViewModel: AddNoteViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -129,12 +132,11 @@ fun Camera(
                                 onMediaCaptured(Uri.fromFile(photoFile))
 
                                 //open previewPage, with parameter photoFIle.
+                                //get access to MoreInfoViewModel and then do it
+                                addNoteViewModel.currentImageName.value = photoFile.toString()
                                 CoroutineScope(Dispatchers.Main)
                                 .launch{
-                                    navController.navigate(
-                                        Screen.PreviewScreen.route +
-                                                "?path=${photoFile}"
-                                    )
+                                    navController.popBackStack()
                                 }
                             }
 

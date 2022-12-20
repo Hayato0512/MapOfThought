@@ -20,7 +20,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideNoteDatabase(app: Application): NoteDataBase {
-        return Room.databaseBuilder(app,NoteDataBase::class.java,NoteDataBase.DATABASE_NAME).allowMainThreadQueries().build()
+        return Room.databaseBuilder(app,NoteDataBase::class.java,NoteDataBase.DATABASE_NAME).allowMainThreadQueries().fallbackToDestructiveMigration().build()
     }
 
 //    @Provides

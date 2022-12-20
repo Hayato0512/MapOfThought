@@ -29,6 +29,9 @@ class AddNoteViewModel @Inject constructor(
     val contentState = _contentState
     var currentNoteId: Int? = null
 
+    var currentImageName = mutableStateOf(String())
+    var currentAudio = mutableStateOf(String())
+
 
     init{
 

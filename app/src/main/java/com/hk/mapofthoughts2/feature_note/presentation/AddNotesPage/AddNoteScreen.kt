@@ -85,7 +85,7 @@ fun AddNoteScreen(
 
             TextTitleField(
                 navController = navController,
-                currentText = titleState,
+                currentText = viewModel.titleState.value,
                 onValueChange = {newText->
                    viewModel.titleState.value = newText
                 },
@@ -105,6 +105,27 @@ fun AddNoteScreen(
                     .padding(10.dp)
                     .background(Color.LightGray)
             )
+            Text(
+                text=viewModel.currentImageName.value
+            )
+            Text(
+                text="he???"
+            )
+            Button(
+               onClick={
+                   println("debug: AddNoteScreen. ${viewModel.currentImageName.value}")
+                   //ok, the problem is , when coming back from Camera, Cannot percist the imageName.
+                   //cuz popStackBack.
+                   //I need to find a way to make the viewModel still live to keep data.
+                   //This is a little tricky for sure. worst case, I would use LocalStorage to fetch the imageNmae. and keep useing popStackBack to keep the content.
+                   //Same thing can be done for Audio system too.
+                   //Ok I think I did omre than enough today. let's rest.
+               }
+            ){
+                Text(
+                    text="check the imageName in viewModel???"
+                )
+            }
             Button(
                 onClick = {
                     // Check permission
@@ -148,7 +169,7 @@ fun AddNoteScreen(
                         println("debug: in ADDNOTESCREEN, locationReturned by fetchLocatin() is lat${locationReturned.lat}, long${locationReturned.long}")
                     }
                         println("debug: now in onClick to insert the note. it.lat is ${location.lat}, it.long is ${location.long}")
-                        val noteToInsert = Note(titleState,contentState,"myRoom", location.lat.toString(), location.long.toString())
+                        val noteToInsert = Note(titleState,contentState,"myRoom", location.lat.toString(), location.long.toString(),"", "")
                         scope.launch{
                             viewModel.addNote(noteToInsert)
                         }

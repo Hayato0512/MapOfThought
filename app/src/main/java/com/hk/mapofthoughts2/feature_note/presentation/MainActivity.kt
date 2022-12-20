@@ -142,7 +142,7 @@ class MainActivity(
                         )
 
                     ){
-                        PreviewScreen()
+                        PreviewScreen(navController)
                     }
                 }
                 }

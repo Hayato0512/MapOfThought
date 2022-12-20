@@ -6,7 +6,7 @@ import com.hk.mapofthoughts2.domain.model.Note
 
 @Database(
     entities =[Note::class] ,
-    version = 2
+    version = 4
 )
 abstract class NoteDataBase: RoomDatabase() {
 

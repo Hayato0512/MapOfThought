@@ -10,6 +10,8 @@ data class Note(
     var locationName:String,
     var latitude: String,
     var longitude: String,
+    var imageName: String,
+    var audioName: String,
 
 
     @PrimaryKey var id: Int? = null

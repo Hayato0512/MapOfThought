@@ -85,7 +85,7 @@ fun NotesScreen(
                     .height(40.dp),
                 onClick = {
                     scope.launch{
-                        viewModel.onEvent(NotesEvent.deleteNoteAt, Note("Title${count.value}", "Content is like this for now. ", "Library", "12", "12"))
+                        viewModel.onEvent(NotesEvent.deleteNoteAt, Note("Title${count.value}", "Content is like this for now. ", "Library", "12", "12","",""))
                     }
                 }) {
                 Text(text = "Delete")
