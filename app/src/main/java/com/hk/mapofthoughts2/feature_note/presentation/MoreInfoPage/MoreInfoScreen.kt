@@ -30,13 +30,17 @@ import java.io.File
 fun MoreInfoScreen(
 navController: NavController,
 acitivity:MainActivity,
-viewModel:AddNoteViewModel = hiltViewModel(),
+moreInfoViewModel : MoreInfoViewModel,
+
+moreInfoDetailViewModel : MoreInfoDetailViewModel,
+//viewModel:AddNoteViewModel = hiltViewModel(),
         audioViewModel:AudioViewModel = hiltViewModel(),
 ){
-    val moreInfoViewModel = MoreInfoViewModel(acitivity)
-    val title:String = viewModel.titleState.value
-    val content:String = viewModel.contentState.value
-    val noteId:Int? = viewModel.currentNoteId
+    val title:String = moreInfoDetailViewModel.titleState.value
+    val content:String = moreInfoDetailViewModel.contentState.value
+    val noteId:Int? = moreInfoDetailViewModel.currentNoteId
+    val imagePathName :String = moreInfoDetailViewModel.imageNameState.value
+    val audioPathName :String = moreInfoDetailViewModel.audioNameState.value
     println("debug: MoreInfoScreen. andioViewModel.recording.value is ${audioViewModel.recordings }")
     var recordings :List<Recording?> = audioViewModel.recordings.value
     val playingState by moreInfoViewModel.middlePlayer.collectAsState()
@@ -50,6 +54,12 @@ viewModel:AddNoteViewModel = hiltViewModel(),
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = "will show the note id: ${noteId}, Title : ${title} Content ${content}"
+        )
+        Text(
+            text = "imagePathName ${imagePathName}"
+        )
+        Text(
+            text = "audioPathName ${audioPathName}"
         )
         if(recordings.size==0){
             Text(
@@ -73,6 +83,16 @@ viewModel:AddNoteViewModel = hiltViewModel(),
         ){
             Text(
                 text="Stop the audio"
+            )
+        }
+        Button(
+            onClick = {
+                moreInfoDetailViewModel.isMoreInfoPage.value = false
+            }
+
+        ){
+            Text(
+                text="go back to the notes page"
             )
         }
         LazyColumn{

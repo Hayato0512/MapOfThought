@@ -27,6 +27,10 @@ class AddNoteViewModel @Inject constructor(
     val titleState = _state
     private var _contentState = mutableStateOf(String())
     val contentState = _contentState
+    private var _imageNameState = mutableStateOf(String())
+    val imageNameState = _imageNameState
+    private var _audioNameState = mutableStateOf(String())
+    val audioNameState = _audioNameState
     var currentNoteId: Int? = null
 
     var isCameraScreen = mutableStateOf(false)
@@ -54,6 +58,11 @@ class AddNoteViewModel @Inject constructor(
 //            println("debug: hello this is AddNoteViewModel. ")
 //        }
 
+        //can someone let this viewmodel about noteId? I am sure.
+        //in NotesScreen, get access to AddNoteViewModel.
+        //who else using this AddNoteViewModel? we are interested in MoreInfoScreen
+        //and then when user clicks one entry, get the id, and then
+        //send it to this viewModel as selectedNoteId.
         savedStateHandle.get<Int>("noteId")?.let{
             noteId->
         if(noteId!=-1){

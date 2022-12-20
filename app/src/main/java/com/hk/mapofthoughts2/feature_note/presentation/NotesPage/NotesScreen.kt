@@ -21,6 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.hk.mapofthoughts2.domain.model.Note
+import com.hk.mapofthoughts2.feature_note.presentation.MainActivity
+import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoDetailViewModel
+import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoScreen
+import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.NotesPage.NoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.NotesPage.NotesEvent
 import com.hk.mapofthoughts2.feature_note.presentation.Screen
@@ -28,92 +32,112 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NotesScreen(
-   navController: NavController,
-   viewModel: NoteViewModel = hiltViewModel()
+    navController: NavController,
+    activity: MainActivity,
+    moreInfoViewModel: MoreInfoViewModel,
+    viewModel: NoteViewModel = hiltViewModel(),
+    moreInfoDetailViewModel: MoreInfoDetailViewModel = hiltViewModel()
 ){
     //we need to make compose state in there.
    val state = viewModel.state.value // ok this is connected to viewModel. Very very very fucking nice.
    val scope = rememberCoroutineScope()
     var count =  remember {mutableStateOf(0)}
     //count.value when use
+    var isMoreInfoPage = moreInfoDetailViewModel.isMoreInfoPage.value
 
-    Box{
-        Column{
+    if(isMoreInfoPage){
+        //show MoreInfoPage
+        MoreInfoScreen(
+            navController = navController,
+            acitivity = activity,
+            moreInfoViewModel = moreInfoViewModel,
+            moreInfoDetailViewModel =moreInfoDetailViewModel ,
+        )
+    }else{
+        Box{
+            Column{
 //            Column{
-           Surface(color=Color.LightGray){
-               LazyColumn(
-                   modifier = Modifier.fillMaxWidth().weight(1f).height(300.dp)
-               ){
-                   items(state.notes){note->
-                       Surface(
-                           color=Color.Green,
-                          modifier = Modifier
-                              .padding(4.dp)
-                              .fillMaxWidth()
-                              .border(BorderStroke(2.dp, SolidColor(Color.Red)) )
-                              .clickable {
-                                  println("debug: you just touched a note: id ${note.id}")
-                                  navController.navigate(
-                                      Screen.MoreInfoScreen.route +
-                                  "?noteId=${note.id}"
-                                  )
+                Surface(color=Color.LightGray){
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .height(300.dp)
+                    ){
+                        items(state.notes){note->
+                            Surface(
+                                color=Color.Green,
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .fillMaxWidth()
+                                    .border(BorderStroke(2.dp, SolidColor(Color.Red)))
+                                    .clickable {
+                                        println("debug: you just touched a note: id ${note.id}")
+                                        moreInfoDetailViewModel.currentNoteId = note.id
+                                        moreInfoDetailViewModel.isMoreInfoPage.value = true
+                                        moreInfoDetailViewModel.setNoteValues()
+//                                        navController.navigate(
+//                                            Screen.MoreInfoScreen.route +
+//                                                    "?noteId=${note.id}"
+//                                        )
 
-                              }
+                                    }
 
-                       ){
-                           Column{
-                               Text(
-                                   text = note.title
-                               )
-                               Row{
-                                   Text(
-                                       text = note.latitude
-                                   )
-                                   Text(
-                                       text = note.longitude
-                                   )
-                               }
-                           }
-                       }
-                   }
-               }
-           }
-
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp),
-                onClick = {
-                    scope.launch{
-                        viewModel.onEvent(NotesEvent.deleteNoteAt, Note("Title${count.value}", "Content is like this for now. ", "Library", "12", "12","",""))
+                            ){
+                                Column{
+                                    Text(
+                                        text = note.title
+                                    )
+                                    Row{
+                                        Text(
+                                            text = note.latitude
+                                        )
+                                        Text(
+                                            text = note.longitude
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
-                }) {
-                Text(text = "Delete")
-            }
+                }
 
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp),
-                onClick = {
-                    scope.launch{
-                        navController.navigate(Screen.AddNoteScreen.route)
-                        println("debug: ? ")
-                    }
-                }) {
-                Text(text = "Write note now")
-            }
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp),
+                    onClick = {
+                        scope.launch{
+                            viewModel.onEvent(NotesEvent.deleteNoteAt, Note("Title${count.value}", "Content is like this for now. ", "Library", "12", "12","",""))
+                        }
+                    }) {
+                    Text(text = "Delete")
+                }
 
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp),
-                onClick = {
-                    scope.launch{
-                        navController.navigate(Screen.MapScreen.route)
-                    }
-                }) {
-                Text(text = "Jump to Map Page")
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp),
+                    onClick = {
+                        scope.launch{
+                            navController.navigate(Screen.AddNoteScreen.route)
+                            println("debug: ? ")
+                        }
+                    }) {
+                    Text(text = "Write note now")
+                }
+
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp),
+                    onClick = {
+                        scope.launch{
+                            navController.navigate(Screen.MapScreen.route)
+                        }
+                    }) {
+                    Text(text = "Jump to Map Page")
+                }
             }
         }
     }

@@ -38,6 +38,7 @@ import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.AudioViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.CameraScreen
 import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.PreviewScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MapPage.MapScreen
+import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoDetailViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.components.AddNoteScreen
@@ -51,6 +52,7 @@ class MainActivity() : AppCompatActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val audioViewModel = AudioViewModel()
     private val moreInfoViewModel = MoreInfoViewModel(this)
+//    private val moreInfoDetailViewModel = MoreInfoDetailViewModel()
 //    private val addNoteViewModel =AddNoteViewModel(noteRepository)
     val activity = this
     private val requestPermissionLauncherAudio = registerForActivityResult(
@@ -101,7 +103,7 @@ class MainActivity() : AppCompatActivity() {
                 NavHost(navController = navController, startDestination =  Screen.NotesScreen.route) {
 
                     composable(route = Screen.NotesScreen.route){
-                        NotesScreen(navController = navController)
+                        NotesScreen(navController = navController,activity,moreInfoViewModel)
                     }
 
                     composable(route = Screen.AddNoteScreen.route){
@@ -117,21 +119,21 @@ class MainActivity() : AppCompatActivity() {
 //                    composable(route = Screen.CameraScreen.route){
 ////                        CameraScreen(navController = navController )
 //                    }
-                    composable(
-                        route = Screen.MoreInfoScreen.route +
-                                "?noteId={noteId}",
-                        arguments = listOf(
-                            navArgument(
-                                name = "noteId"
-                            ){
-                                type = NavType.IntType
-                                defaultValue= -1
-                            },
-                        )
-
-                    ){
-                        MoreInfoScreen(navController = navController , activity)
-                    }
+//                    composable(
+//                        route = Screen.MoreInfoScreen.route +
+//                                "?noteId={noteId}",
+//                        arguments = listOf(
+//                            navArgument(
+//                                name = "noteId"
+//                            ){
+//                                type = NavType.IntType
+//                                defaultValue= -1
+//                            },
+//                        )
+//
+//                    ){
+//                        MoreInfoScreen(navController = navController , activity, moreInfoViewModel)
+//                    }
                     composable(
                         route = Screen.PreviewScreen.route +
                                 "?path={path}",

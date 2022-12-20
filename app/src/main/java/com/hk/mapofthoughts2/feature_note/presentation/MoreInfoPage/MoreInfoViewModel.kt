@@ -6,10 +6,12 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hk.mapofthoughts2.domain.repository.NoteRepository
 import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.entities.generateRecordingName
 import com.hk.mapofthoughts2.feature_note.presentation.MainActivity
 import dagger.Provides
@@ -22,12 +24,20 @@ import java.net.URI
 import javax.inject.Inject
 
 class MoreInfoViewModel (
-    activity: Activity
+    activity: Activity,
 ): ViewModel() {
+
+    private var _titleState = mutableStateOf(String())
+    val titleState = _titleState
+    private var _contentState = mutableStateOf(String())
+    val contentState = _contentState
+    private var _imageNameState = mutableStateOf(String())
+    val imageNameState = _imageNameState
+    private var _audioNameState = mutableStateOf(String())
+    val audioNameState = _audioNameState
+    var currentNoteId: Int? = null
     private val audioPlayer: AudioPlayer = AudioPlayer(activity)
-
     var recorder: MediaRecorder? = null
-
     //MutableStateFlow
     val recordingState = MutableStateFlow(false)
 
@@ -40,6 +50,7 @@ class MoreInfoViewModel (
 
     val middlePlayer = MutableStateFlow(MiddlePlayer())
     val mHandler = Handler(Looper.getMainLooper())
+
 
     fun initMediaPlayer(uri: Uri) {
 

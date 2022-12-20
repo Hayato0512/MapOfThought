@@ -185,7 +185,7 @@ fun AddNoteScreen(
                             println("debug: in ADDNOTESCREEN, locationReturned by fetchLocatin() is lat${locationReturned.lat}, long${locationReturned.long}")
                         }
                         println("debug: now in onClick to insert the note. it.lat is ${location.lat}, it.long is ${location.long}")
-                        val noteToInsert = Note(titleState,contentState,"myRoom", location.lat.toString(), location.long.toString(),"", "")
+                        val noteToInsert = Note(titleState,contentState,"myRoom", location.lat.toString(), location.long.toString(),viewModel.currentImageName.value, audioViewModel.currentAudioFileName.value )
                         scope.launch{
                             viewModel.addNote(noteToInsert)
                         }
