@@ -23,16 +23,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.hk.mapofthoughts2.R
+import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoDetailViewModel
+import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.Screen
 
 //import coil.compose.rememberImagePainter
 @Composable
 fun PreviewScreen(
     navController: NavController,
+    moreInfoDetailViewModel: MoreInfoDetailViewModel,
     viewModel: CameraViewModel = hiltViewModel(),
     addNoteViewModel: AddNoteViewModel = hiltViewModel(),
 ) {
-    val pathState :String= viewModel.pathState.value
+    val pathState :String= moreInfoDetailViewModel.imageNameState.value
     val savedStateHandle: SavedStateHandle = SavedStateHandle()
     val path : String? = savedStateHandle.get<String>("path")
     val imageName = pathState?.split("/")
@@ -68,23 +71,20 @@ fun PreviewScreen(
                 .height(200.dp)
                 .padding(10.dp)
         )
-        Text(
-            text="what up??"
-        )
-        Text(
-            text="the path I got from viewModel is ${pathState}??"
-        )
-        Button(
-           onClick={
-              //set the path name to addNoteVIewModel.currentImageName
-            addNoteViewModel.currentImageName.value= pathState
-               println("debug: YO!YO! PreviewScreen. ${addNoteViewModel.currentImageName.value}")
-               navController.navigate(Screen.AddNoteScreen.route)
-           }
-        ){
-           Text(
-               text="choose this photo"
-           )
-        }
+//        Text(
+//            text="the path I got from viewModel is ${pathState}??"
+//        )
+//        Button(
+//           onClick={
+//              //set the path name to addNoteVIewModel.currentImageName
+//            addNoteViewModel.currentImageName.value= pathState
+//               println("debug: YO!YO! PreviewScreen. ${addNoteViewModel.currentImageName.value}")
+//               navController.navigate(Screen.AddNoteScreen.route)
+//           }
+//        ){
+//           Text(
+//               text="choose this photo"
+//           )
+//        }
     }
 }

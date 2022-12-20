@@ -189,6 +189,9 @@ fun AddNoteScreen(
                         scope.launch{
                             viewModel.addNote(noteToInsert)
                         }
+                        //Reset the page input
+                       audioViewModel.currentAudioFileName.value = ""
+                        viewModel.currentImageName.value = ""
                         navController.navigate(Screen.NotesScreen.route)
 //                    }
                     }

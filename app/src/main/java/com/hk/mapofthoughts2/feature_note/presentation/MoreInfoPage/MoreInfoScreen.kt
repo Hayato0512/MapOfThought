@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.AudioViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.entities.Recording
+import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.PreviewScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MainActivity
 import dagger.Lazy
 import retrofit2.http.Url
@@ -95,6 +96,8 @@ moreInfoDetailViewModel : MoreInfoDetailViewModel,
                 text="go back to the notes page"
             )
         }
+        //PreviewScreen
+        PreviewScreen(navController = navController,moreInfoDetailViewModel)
         LazyColumn{
             itemsIndexed(recordings){index, recording->
                Text(

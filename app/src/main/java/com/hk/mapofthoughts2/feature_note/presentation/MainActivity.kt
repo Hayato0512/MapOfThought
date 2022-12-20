@@ -134,21 +134,21 @@ class MainActivity() : AppCompatActivity() {
 //                    ){
 //                        MoreInfoScreen(navController = navController , activity, moreInfoViewModel)
 //                    }
-                    composable(
-                        route = Screen.PreviewScreen.route +
-                                "?path={path}",
-                        arguments = listOf(
-                            navArgument(
-                                name = "path"
-                            ){
-                                type = NavType.StringType
-                                defaultValue=""
-                            },
-                        )
-
-                    ){
-                        PreviewScreen(navController)
-                    }
+//                    composable(
+//                        route = Screen.PreviewScreen.route +
+//                                "?path={path}",
+//                        arguments = listOf(
+//                            navArgument(
+//                                name = "path"
+//                            ){
+//                                type = NavType.StringType
+//                                defaultValue=""
+//                            },
+//                        )
+//
+//                    ){
+//                        PreviewScreen(navController)
+//                    }
                 }
                 }
                 
