@@ -28,7 +28,10 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.hk.mapofthoughts2.R
+import com.hk.mapofthoughts2.data.NoteDao
 import com.hk.mapofthoughts2.domain.model.Location2
+import com.hk.mapofthoughts2.domain.repository.NoteRepository
+import com.hk.mapofthoughts2.domain.repository.NoteRepositoryImpl
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.AudioScreen
 import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.AudioViewModel
@@ -44,11 +47,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
 @AndroidEntryPoint
-class MainActivity(
-) : AppCompatActivity() {
+class MainActivity() : AppCompatActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val audioViewModel = AudioViewModel()
     private val moreInfoViewModel = MoreInfoViewModel(this)
+//    private val addNoteViewModel =AddNoteViewModel(noteRepository)
     val activity = this
     private val requestPermissionLauncherAudio = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -103,7 +106,7 @@ class MainActivity(
 
                     composable(route = Screen.AddNoteScreen.route){
                         fetchLocation()
-                        AddNoteScreen(navController = navController, {fetchLocation()},{callRequestPermission()},fetchLocation())
+                        AddNoteScreen(navController = navController, {fetchLocation()},{callRequestPermission()},fetchLocation(),getDirectory())
                     }
                     composable(route = Screen.MapScreen.route){
                         MapScreen(navController = navController )
@@ -111,9 +114,9 @@ class MainActivity(
                     composable(route = Screen.AudioScreen.route){
                         AudioScreen(navController = navController ,activity)
                     }
-                    composable(route = Screen.CameraScreen.route){
-                        CameraScreen(navController = navController, getDirectory())
-                    }
+//                    composable(route = Screen.CameraScreen.route){
+////                        CameraScreen(navController = navController )
+//                    }
                     composable(
                         route = Screen.MoreInfoScreen.route +
                                 "?noteId={noteId}",

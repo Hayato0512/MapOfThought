@@ -38,6 +38,7 @@ import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewM
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.ApiInterface
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.WeatherData
 import com.hk.mapofthoughts2.feature_note.presentation.Camera
+import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.CameraScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MainActivity
 import com.hk.mapofthoughts2.feature_note.presentation.NotesPage.NoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.Screen
@@ -48,6 +49,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("MissingPermission")
@@ -57,13 +59,15 @@ fun AddNoteScreen(
     fetchLocation:()-> Location2,
     callRequestPermission:()-> Unit,
     location: Location2,
-    viewModel: AddNoteViewModel = hiltViewModel(),
+    outputDirectoryFromActivity: File,
+    viewModel: AddNoteViewModel= hiltViewModel(),
 ){
     val titleState = viewModel.titleState.value
     val contentState = viewModel.contentState.value
+    var isCameraScreen = viewModel.isCameraScreen.value
+    var isAudioScreen:Boolean = viewModel.isAudioScreen.value
     val scope = rememberCoroutineScope()
 //        getWeatherData();
-
 //        val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -79,95 +83,102 @@ fun AddNoteScreen(
         }
     }
     val context = LocalContext.current
-    Box{
-        Column{
+    if(isCameraScreen){
+        CameraScreen(navController,outputDirectoryFromActivity, viewModel)
+    }else if(isAudioScreen){
+
+    }else{
+
+        Box{
+            Column{
 
 
-            TextTitleField(
-                navController = navController,
-                currentText = viewModel.titleState.value,
-                onValueChange = {newText->
-                   viewModel.titleState.value = newText
-                },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .background(Color.DarkGray)
-            )
-            TextTitleField(
-                navController = navController,
-                currentText = contentState,
-                onValueChange = {newText->
-                    viewModel.contentState.value = newText
-
-                },
-                modifier = Modifier
-                    .padding(10.dp)
-                    .background(Color.LightGray)
-            )
-            Text(
-                text=viewModel.currentImageName.value
-            )
-            Text(
-                text="he???"
-            )
-            Button(
-               onClick={
-                   println("debug: AddNoteScreen. ${viewModel.currentImageName.value}")
-                   //ok, the problem is , when coming back from Camera, Cannot percist the imageName.
-                   //cuz popStackBack.
-                   //I need to find a way to make the viewModel still live to keep data.
-                   //This is a little tricky for sure. worst case, I would use LocalStorage to fetch the imageNmae. and keep useing popStackBack to keep the content.
-                   //Same thing can be done for Audio system too.
-                   //Ok I think I did omre than enough today. let's rest.
-               }
-            ){
-                Text(
-                    text="check the imageName in viewModel???"
+                TextTitleField(
+                    navController = navController,
+                    currentText = viewModel.titleState.value,
+                    onValueChange = {newText->
+                        viewModel.titleState.value = newText
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .background(Color.DarkGray)
                 )
-            }
-            Button(
-                onClick = {
-                    // Check permission
-                    when (PackageManager.PERMISSION_GRANTED) {
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                        ) -> {
-                            // Some works that require permission
-                            Log.d("ExampleScreen","Code requires permission")
-                        }
-                        else -> {
-                            // Asking for permission
-                            launcher.launch(Manifest.permission.CAMERA)
-                        }
+                TextTitleField(
+                    navController = navController,
+                    currentText = contentState,
+                    onValueChange = {newText->
+                        viewModel.contentState.value = newText
+
+                    },
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .background(Color.LightGray)
+                )
+                Text(
+                    text=viewModel.currentImageName.value
+                )
+                Text(
+                    text="he???"
+                )
+                Button(
+                    onClick={
+                        println("debug: AddNoteScreen. ${viewModel.currentImageName.value}")
+                        //ok, the problem is , when coming back from Camera, Cannot percist the imageName.
+                        //cuz popStackBack.
+                        //I need to find a way to make the viewModel still live to keep data.
+                        //This is a little tricky for sure. worst case, I would use LocalStorage to fetch the imageNmae. and keep useing popStackBack to keep the content.
+                        //Same thing can be done for Audio system too.
+                        //Ok I think I did omre than enough today. let's rest.
                     }
+                ){
+                    Text(
+                        text="check the imageName in viewModel???"
+                    )
                 }
-            ) {
-                Text(text = "Check and Request Permission")
-            }
-            Button(
-               onClick={
-                       navController.navigate("camera_screen")
-               },
-//            modifier = Modifier.height(30.dp).width(40.dp)
-            ){
-               Text(text="Camera")
-            }
-            Button(
-                onClick={
-                    navController.navigate("audio_screen")
-                },
-//            modifier = Modifier.height(30.dp).width(40.dp)
-            ){
-                Text(text="Audio")
-            }
-            Button(
-                onClick = {
-                    fetchLocation().also {
-                        var locationReturned: Location2 = Location2(it.lat, it.long)
-                        println("debug: in ADDNOTESCREEN, locationReturned by fetchLocatin() is lat${locationReturned.lat}, long${locationReturned.long}")
+                Button(
+                    onClick = {
+                        // Check permission
+                        when (PackageManager.PERMISSION_GRANTED) {
+                            ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                            ) -> {
+                                // Some works that require permission
+                                Log.d("ExampleScreen","Code requires permission")
+                            }
+                            else -> {
+                                // Asking for permission
+                                launcher.launch(Manifest.permission.CAMERA)
+                            }
+                        }
                     }
+                ) {
+                    Text(text = "Check and Request Permission")
+                }
+                Button(
+                    onClick={
+//                        navController.navigate("camera_screen")
+                            viewModel.isCameraScreen.value = true
+                    },
+//            modifier = Modifier.height(30.dp).width(40.dp)
+                ){
+                    Text(text="Camera")
+                }
+                Button(
+                    onClick={
+                        navController.navigate("audio_screen")
+                    },
+//            modifier = Modifier.height(30.dp).width(40.dp)
+                ){
+                    Text(text="Audio")
+                }
+                Button(
+                    onClick = {
+                        fetchLocation().also {
+                            var locationReturned: Location2 = Location2(it.lat, it.long)
+                            println("debug: in ADDNOTESCREEN, locationReturned by fetchLocatin() is lat${locationReturned.lat}, long${locationReturned.long}")
+                        }
                         println("debug: now in onClick to insert the note. it.lat is ${location.lat}, it.long is ${location.long}")
                         val noteToInsert = Note(titleState,contentState,"myRoom", location.lat.toString(), location.long.toString(),"", "")
                         scope.launch{
@@ -175,29 +186,31 @@ fun AddNoteScreen(
                         }
                         navController.navigate(Screen.NotesScreen.route)
 //                    }
+                    }
+
+                ) {
+                    Text(text="submit")
+
                 }
-
-            ) {
-                Text(text="submit")
-
-            }
-            Button(
-                onClick = {
-                    var locationReturned:Location2 = Location2(-1, -1)
-                     fetchLocation().also {
-                       locationReturned.lat = it.lat
-                         locationReturned.long = it.long
-                         println("debug: OK! in AddNoteScreen, we got locationReturned ${locationReturned.lat}, ${locationReturned.long}")
+                Button(
+                    onClick = {
+                        var locationReturned:Location2 = Location2(-1, -1)
+                        fetchLocation().also {
+                            locationReturned.lat = it.lat
+                            locationReturned.long = it.long
+                            println("debug: OK! in AddNoteScreen, we got locationReturned ${locationReturned.lat}, ${locationReturned.long}")
+                        }
+                        println("debug: OK! in AddNoteScreen, we got ${location.lat}, ${location.long}")
+                        navController.navigate(Screen.NotesScreen.route)
                     }
-                    println("debug: OK! in AddNoteScreen, we got ${location.lat}, ${location.long}")
-                    navController.navigate(Screen.NotesScreen.route)
-                    }
-            ) {
-                Text(text="getLocation")
-            }
+                ) {
+                    Text(text="getLocation")
+                }
 //            Camera()
+            }
         }
     }
+
 
 }
 

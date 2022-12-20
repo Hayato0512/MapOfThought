@@ -20,14 +20,17 @@ import javax.inject.Inject
 @HiltViewModel
 class AddNoteViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
-    savedStateHandle: SavedStateHandle
 ): ViewModel(){
 //    var fusedLocationProviderClient =  LocationServices.getFusedLocationProviderClient()
     private var _state = mutableStateOf(String())
+        private val savedStateHandle= SavedStateHandle()
     val titleState = _state
     private var _contentState = mutableStateOf(String())
     val contentState = _contentState
     var currentNoteId: Int? = null
+
+    var isCameraScreen = mutableStateOf(false)
+    var isAudioScreen = mutableStateOf(false)
 
     var currentImageName = mutableStateOf(String())
     var currentAudio = mutableStateOf(String())

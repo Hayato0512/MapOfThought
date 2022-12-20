@@ -44,7 +44,7 @@ fun Camera(
     navController: NavController,
     outputDirectory : File,
     onMediaCaptured: (Uri?) -> Unit,
-    addNoteViewModel: AddNoteViewModel = hiltViewModel()
+    addNoteViewModel: AddNoteViewModel
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -136,7 +136,8 @@ fun Camera(
                                 addNoteViewModel.currentImageName.value = photoFile.toString()
                                 CoroutineScope(Dispatchers.Main)
                                 .launch{
-                                    navController.popBackStack()
+//                                    navController.navigate(Screen.AddNoteScreen.route)
+                                    addNoteViewModel.isCameraScreen.value = false
                                 }
                             }
 

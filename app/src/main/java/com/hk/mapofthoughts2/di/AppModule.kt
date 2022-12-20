@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.hk.mapofthoughts2.data.NoteDataBase
 import com.hk.mapofthoughts2.domain.repository.NoteRepository
 import com.hk.mapofthoughts2.domain.repository.NoteRepositoryImpl
+import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.AudioPlayer
 import dagger.Module
 import dagger.Provides
@@ -34,6 +35,12 @@ object AppModule {
     fun provideNoteRepository(db: NoteDataBase): NoteRepository {
         return NoteRepositoryImpl(db.noteDao)
     }
+
+//    @Provides
+//    @Singleton
+//    fun provideAddNoteViewModel(repositoryImpl: NoteRepositoryImpl): AddNoteViewModel {
+//        return AddNoteViewModel(repositoryImpl)
+//    }
 
 //    @Provides
 //    @Singleton
