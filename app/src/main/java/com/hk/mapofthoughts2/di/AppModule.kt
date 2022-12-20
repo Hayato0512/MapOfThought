@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.hk.mapofthoughts2.data.NoteDataBase
 import com.hk.mapofthoughts2.domain.repository.NoteRepository
 import com.hk.mapofthoughts2.domain.repository.NoteRepositoryImpl
+import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.AudioPlayer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +22,12 @@ object AppModule {
     fun provideNoteDatabase(app: Application): NoteDataBase {
         return Room.databaseBuilder(app,NoteDataBase::class.java,NoteDataBase.DATABASE_NAME).allowMainThreadQueries().build()
     }
+
+//    @Provides
+//    @Singleton
+//    fun provideAudioPlayer(app: Application): AudioPlayer {
+//        return AudioPlayer(app)
+//    }
 
     @Provides
     @Singleton

@@ -36,6 +36,7 @@ import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.CameraScreen
 import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.PreviewScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MapPage.MapScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoScreen
+import com.hk.mapofthoughts2.feature_note.presentation.MoreInfoPage.MoreInfoViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.components.AddNoteScreen
 import com.hk.mapofthoughts2.feature_note.presentation.components.NotesScreen
 import com.hk.mapofthoughts2.theme.MapOfThoughtsAppTheme
@@ -47,6 +48,7 @@ class MainActivity(
 ) : AppCompatActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val audioViewModel = AudioViewModel()
+    private val moreInfoViewModel = MoreInfoViewModel(this)
     val activity = this
     private val requestPermissionLauncherAudio = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -73,8 +75,14 @@ class MainActivity(
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        audioViewModel.folderPath = externalCacheDir?.absolutePath
-            ?: throw IllegalStateException("debug: externalCacheDir is null! LILLOOO!")
+//        audioViewModel.folderPath = externalCacheDir?.absolutePath
+//            ?: throw IllegalStateException("debug: externalCacheDir is null! LILLOOO!")
+//        moreInfoViewModel.folderPath = externalCacheDir?.absolutePath
+//            ?: throw IllegalStateException("debug: externalCacheDir is null! LILLOOO!")
+
+        audioViewModel.folderPath = getDirectory().toString()
+        println("debug: hey, this is Main. audioViewModel.folderPath is ${audioViewModel.folderPath}")
+        moreInfoViewModel.folderPath = getDirectory().toString()
 //        requestCameraPermission()
         var locationState  = mutableStateOf(Location2(-1, -1))
          fusedLocationProviderClient =  LocationServices.getFusedLocationProviderClient(this)
@@ -119,7 +127,7 @@ class MainActivity(
                         )
 
                     ){
-                        MoreInfoScreen(navController = navController )
+                        MoreInfoScreen(navController = navController , activity)
                     }
                     composable(
                         route = Screen.PreviewScreen.route +
