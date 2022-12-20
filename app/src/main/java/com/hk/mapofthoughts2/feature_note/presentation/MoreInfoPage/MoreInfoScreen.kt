@@ -46,7 +46,7 @@ moreInfoDetailViewModel : MoreInfoDetailViewModel,
     var recordings :List<Recording?> = audioViewModel.recordings.value
     val playingState by moreInfoViewModel.middlePlayer.collectAsState()
 
-   moreInfoViewModel.initMediaPlayer(Uri.fromFile(File("")))
+   moreInfoViewModel.initMediaPlayer(Uri.fromFile(File(audioPathName)))
     Column{
 
         Text(

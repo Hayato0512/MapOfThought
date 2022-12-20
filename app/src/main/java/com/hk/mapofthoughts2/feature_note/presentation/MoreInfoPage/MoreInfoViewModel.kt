@@ -42,11 +42,11 @@ class MoreInfoViewModel (
     val recordingState = MutableStateFlow(false)
 
     var folderPath: String = ""
-    var currentPath =
-        "/storage/emulated/0/Android/media/com.hk.mapofthoughts2/MapOfThoughts2/19122022-140908.m4a"
-    var uriToPass = Uri.fromFile(
-        File(currentPath)
-    )
+//    var currentPath =
+//        "/storage/emulated/0/Android/media/com.hk.mapofthoughts2/MapOfThoughts2/19122022-140908.m4a"
+//    var uriToPass = Uri.fromFile(
+//        File()
+//    )
 
     val middlePlayer = MutableStateFlow(MiddlePlayer())
     val mHandler = Handler(Looper.getMainLooper())
@@ -55,7 +55,7 @@ class MoreInfoViewModel (
     fun initMediaPlayer(uri: Uri) {
 
         viewModelScope.launch {
-            audioPlayer.prepareMediaPlayer(uriToPass)
+            audioPlayer.prepareMediaPlayer(uri)
             //now, the path is hardcorded.
             middlePlayer.emit(
                 middlePlayer.value.copy(
