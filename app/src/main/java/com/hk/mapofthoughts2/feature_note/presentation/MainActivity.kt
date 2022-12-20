@@ -106,14 +106,14 @@ class MainActivity() : AppCompatActivity() {
 
                     composable(route = Screen.AddNoteScreen.route){
                         fetchLocation()
-                        AddNoteScreen(navController = navController, {fetchLocation()},{callRequestPermission()},fetchLocation(),getDirectory())
+                        AddNoteScreen(navController = navController, {fetchLocation()},{callRequestPermission()},fetchLocation(),getDirectory(),activity, audioViewModel)
                     }
                     composable(route = Screen.MapScreen.route){
                         MapScreen(navController = navController )
                     }
-                    composable(route = Screen.AudioScreen.route){
-                        AudioScreen(navController = navController ,activity)
-                    }
+//                    composable(route = Screen.AudioScreen.route){
+//                        AudioScreen(navController = navController ,activity)
+//                    }
 //                    composable(route = Screen.CameraScreen.route){
 ////                        CameraScreen(navController = navController )
 //                    }

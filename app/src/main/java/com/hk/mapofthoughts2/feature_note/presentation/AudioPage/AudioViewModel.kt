@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.MediaRecorder
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.entities.Recording
@@ -25,6 +26,7 @@ class AudioViewModel @Inject constructor(
     var currentRecording = MutableStateFlow<Recording?>(null)
     val recordingState = MutableStateFlow(false)
     val moreInfoRepository = MoreInfoRepository()
+    var currentAudioFileName = mutableStateOf(String())
 
     var folderPath: String = ""
     init{
@@ -41,6 +43,7 @@ class AudioViewModel @Inject constructor(
     fun startRecording(){
 
         val fileName = generateRecordingName(folderPath)
+       currentAudioFileName.value = fileName
 
         recorder = MediaRecorder().apply{
            setAudioSource(MediaRecorder.AudioSource.MIC)

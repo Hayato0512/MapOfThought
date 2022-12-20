@@ -7,12 +7,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.MainActivity
 
 @Composable
 fun AudioScreen(
    navController: NavController,
-   activity:MainActivity
+   activity:MainActivity,
+   addNoteViewModel: AddNoteViewModel
 ) {
     Column{
 
@@ -32,6 +34,7 @@ fun AudioScreen(
             Button(
                 onClick = {
                     activity.requestStopRecording()
+                    addNoteViewModel.isAudioScreen.value = false
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

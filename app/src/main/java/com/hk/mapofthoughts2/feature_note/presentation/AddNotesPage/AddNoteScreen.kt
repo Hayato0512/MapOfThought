@@ -37,6 +37,8 @@ import com.hk.mapofthoughts2.domain.model.Note
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.AddNoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.ApiInterface
 import com.hk.mapofthoughts2.feature_note.presentation.AddNotesPage.WeatherData
+import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.AudioScreen
+import com.hk.mapofthoughts2.feature_note.presentation.AudioPage.AudioViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.Camera
 import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.CameraScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MainActivity
@@ -60,6 +62,8 @@ fun AddNoteScreen(
     callRequestPermission:()-> Unit,
     location: Location2,
     outputDirectoryFromActivity: File,
+    activity: MainActivity,
+    audioViewModel: AudioViewModel ,
     viewModel: AddNoteViewModel= hiltViewModel(),
 ){
     val titleState = viewModel.titleState.value
@@ -86,7 +90,7 @@ fun AddNoteScreen(
     if(isCameraScreen){
         CameraScreen(navController,outputDirectoryFromActivity, viewModel)
     }else if(isAudioScreen){
-
+        AudioScreen(navController = navController, activity =activity , viewModel)
     }else{
 
         Box{
@@ -119,7 +123,7 @@ fun AddNoteScreen(
                     text=viewModel.currentImageName.value
                 )
                 Text(
-                    text="he???"
+                    text=audioViewModel.currentAudioFileName.value
                 )
                 Button(
                     onClick={
@@ -167,7 +171,8 @@ fun AddNoteScreen(
                 }
                 Button(
                     onClick={
-                        navController.navigate("audio_screen")
+//                        navController.navigate("audio_screen")
+                            viewModel.isAudioScreen.value = true
                     },
 //            modifier = Modifier.height(30.dp).width(40.dp)
                 ){
