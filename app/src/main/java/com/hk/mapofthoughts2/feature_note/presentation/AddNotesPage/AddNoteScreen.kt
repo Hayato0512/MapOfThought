@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -93,9 +94,14 @@ fun AddNoteScreen(
         AudioScreen(navController = navController, activity =activity , viewModel)
     }else{
 
-        Box{
-            Column{
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ){
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ){
 
+                Text(text = "Title",modifier=Modifier.padding(5.dp))
 
                 TextTitleField(
                     navController = navController,
@@ -107,7 +113,10 @@ fun AddNoteScreen(
                         .padding(16.dp)
                         .fillMaxWidth()
                         .background(Color.DarkGray)
+                        .weight(2f)
+
                 )
+                Text(text = "Content", modifier=Modifier.padding(5.dp))
                 TextTitleField(
                     navController = navController,
                     currentText = contentState,
@@ -116,33 +125,16 @@ fun AddNoteScreen(
 
                     },
                     modifier = Modifier
-                        .padding(10.dp)
+                        .padding(16.dp)
                         .background(Color.LightGray)
+                        .fillMaxWidth()
+                        .weight(5f)
                 )
                 Text(
-                    text=viewModel.currentImageName.value
+                    text="Image", modifier=Modifier.padding(5.dp)
                 )
-                Text(
-                    text=audioViewModel.currentAudioFileName.value
-                )
-                Button(
-                    onClick={
-                        println("debug: AddNoteScreen. ${viewModel.currentImageName.value}")
-                        //ok, the problem is , when coming back from Camera, Cannot percist the imageName.
-                        //cuz popStackBack.
-                        //I need to find a way to make the viewModel still live to keep data.
-                        //This is a little tricky for sure. worst case, I would use LocalStorage to fetch the imageNmae. and keep useing popStackBack to keep the content.
-                        //Same thing can be done for Audio system too.
-                        //Ok I think I did omre than enough today. let's rest.
-                    }
-                ){
-                    Text(
-                        text="check the imageName in viewModel???"
-                    )
-                }
                 Button(
                     onClick = {
-                        // Check permission
                         when (PackageManager.PERMISSION_GRANTED) {
                             ContextCompat.checkSelfPermission(
                                 context,
@@ -160,60 +152,100 @@ fun AddNoteScreen(
                 ) {
                     Text(text = "Check and Request Permission")
                 }
-                Button(
-                    onClick={
+                Row(
+                   modifier=Modifier.weight(2.5f).background(Color.Yellow).fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ){
+                    Box(){
+                        Text(
+                            text=viewModel.currentImageName.value
+                        )
+                    }
+                   //put Button
+                    Button(
+                        onClick={
 //                        navController.navigate("camera_screen")
                             viewModel.isCameraScreen.value = true
-                    },
+                        },
 //            modifier = Modifier.height(30.dp).width(40.dp)
-                ){
-                    Text(text="Camera")
+                    ){
+                        Text(text="Camera")
+                    }
                 }
-                Button(
-                    onClick={
+
+                Text(
+                    text="Audio", modifier=Modifier.padding(5.dp)
+                )
+                //Audio
+                Row(
+                    modifier=Modifier.weight(2.5f).background(Color.Blue).fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ){
+                    Box(){
+                        Text(
+                            text=audioViewModel.currentAudioFileName.value
+                        )
+                    }
+                    //put Button
+                    Button(
+                        onClick={
 //                        navController.navigate("audio_screen")
                             viewModel.isAudioScreen.value = true
-                    },
+                        },
 //            modifier = Modifier.height(30.dp).width(40.dp)
+                    ){
+                        Text(text="Audio")
+                    }
+                }
+
+
+                Box(
+                   modifier = Modifier.fillMaxWidth().weight(2f, false)
+
                 ){
-                    Text(text="Audio")
-                }
-                Button(
-                    onClick = {
-                        fetchLocation().also {
-                            var locationReturned: Location2 = Location2(it.lat, it.long)
-                            println("debug: in ADDNOTESCREEN, locationReturned by fetchLocatin() is lat${locationReturned.lat}, long${locationReturned.long}")
-                        }
-                        println("debug: now in onClick to insert the note. it.lat is ${location.lat}, it.long is ${location.long}")
-                        val noteToInsert = Note(titleState,contentState,"myRoom", location.lat.toString(), location.long.toString(),viewModel.currentImageName.value, audioViewModel.currentAudioFileName.value )
-                        scope.launch{
-                            viewModel.addNote(noteToInsert)
-                        }
-                        //Reset the page input
-                       audioViewModel.currentAudioFileName.value = ""
-                        viewModel.currentImageName.value = ""
-                        navController.navigate(Screen.NotesScreen.route)
+                    Row(
+
+                        modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                    ){
+                        Button(
+                            onClick = {
+                                fetchLocation().also {
+                                    var locationReturned: Location2 = Location2(it.lat, it.long)
+                                    println("debug: in ADDNOTESCREEN, locationReturned by fetchLocatin() is lat${locationReturned.lat}, long${locationReturned.long}")
+                                }
+                                println("debug: now in onClick to insert the note. it.lat is ${location.lat}, it.long is ${location.long}")
+                                val noteToInsert = Note(titleState,contentState,"myRoom", location.lat.toString(), location.long.toString(),viewModel.currentImageName.value, audioViewModel.currentAudioFileName.value )
+                                scope.launch{
+                                    viewModel.addNote(noteToInsert)
+                                }
+                                //Reset the page input
+                                audioViewModel.currentAudioFileName.value = ""
+                                viewModel.currentImageName.value = ""
+                                navController.navigate(Screen.NotesScreen.route)
 //                    }
-                    }
+                            }
 
-                ) {
-                    Text(text="submit")
+                        ) {
+                            Text(text="submit")
 
-                }
-                Button(
-                    onClick = {
-                        var locationReturned:Location2 = Location2(-1, -1)
-                        fetchLocation().also {
-                            locationReturned.lat = it.lat
-                            locationReturned.long = it.long
-                            println("debug: OK! in AddNoteScreen, we got locationReturned ${locationReturned.lat}, ${locationReturned.long}")
                         }
-                        println("debug: OK! in AddNoteScreen, we got ${location.lat}, ${location.long}")
-                        navController.navigate(Screen.NotesScreen.route)
                     }
-                ) {
-                    Text(text="getLocation")
                 }
+//                Button(
+//                    onClick = {
+//                        var locationReturned:Location2 = Location2(-1, -1)
+//                        fetchLocation().also {
+//                            locationReturned.lat = it.lat
+//                            locationReturned.long = it.long
+//                            println("debug: OK! in AddNoteScreen, we got locationReturned ${locationReturned.lat}, ${locationReturned.long}")
+//                        }
+//                        println("debug: OK! in AddNoteScreen, we got ${location.lat}, ${location.long}")
+//                        navController.navigate(Screen.NotesScreen.route)
+//                    }
+//                ) {
+//                    Text(text="getLocation")
+//                }
 //            Camera()
             }
         }

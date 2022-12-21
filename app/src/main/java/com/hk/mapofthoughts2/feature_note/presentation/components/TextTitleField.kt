@@ -16,5 +16,5 @@ currentText:String,
     modifier: Modifier
     ){
 
-BasicTextField(value = currentText, onValueChange = onValueChange)
+BasicTextField(value = currentText, onValueChange = onValueChange, modifier)
 }
