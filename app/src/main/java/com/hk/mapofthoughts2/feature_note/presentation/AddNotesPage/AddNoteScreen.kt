@@ -45,6 +45,8 @@ import com.hk.mapofthoughts2.feature_note.presentation.CameraPage.CameraScreen
 import com.hk.mapofthoughts2.feature_note.presentation.MainActivity
 import com.hk.mapofthoughts2.feature_note.presentation.NotesPage.NoteViewModel
 import com.hk.mapofthoughts2.feature_note.presentation.Screen
+import com.hk.mapofthoughts2.theme.Cream
+import com.hk.mapofthoughts2.theme.Orange
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -95,7 +97,7 @@ fun AddNoteScreen(
     }else{
 
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().background(Orange)
         ){
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -112,7 +114,7 @@ fun AddNoteScreen(
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth()
-                        .background(Color.DarkGray)
+                        .background(Cream)
                         .weight(2f)
 
                 )
@@ -126,7 +128,7 @@ fun AddNoteScreen(
                     },
                     modifier = Modifier
                         .padding(16.dp)
-                        .background(Color.LightGray)
+                        .background(Cream)
                         .fillMaxWidth()
                         .weight(5f)
                 )
@@ -153,7 +155,7 @@ fun AddNoteScreen(
                     Text(text = "Check and Request Permission")
                 }
                 Row(
-                   modifier=Modifier.weight(2.5f).background(Color.Yellow).fillMaxWidth(),
+                   modifier=Modifier.padding(16.dp).weight(2.5f).background(Cream).fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 ){
                     Box(){
@@ -178,7 +180,7 @@ fun AddNoteScreen(
                 )
                 //Audio
                 Row(
-                    modifier=Modifier.weight(2.5f).background(Color.Blue).fillMaxWidth(),
+                    modifier=Modifier.padding(16.dp).weight(2.5f).background(Cream).fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 ){
                     Box(){
@@ -197,10 +199,11 @@ fun AddNoteScreen(
                         Text(text="Audio")
                     }
                 }
+                Spacer(modifier=Modifier.height(8.dp))
 
 
                 Box(
-                   modifier = Modifier.fillMaxWidth().weight(2f, false)
+                   modifier = Modifier.padding(16.dp).fillMaxWidth().weight(2f, false).background(Cream)
 
                 ){
                     Row(
